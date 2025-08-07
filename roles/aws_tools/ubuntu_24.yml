@@ -1,0 +1,13 @@
+---
+- name: Install AWS CLI v2.
+  become: true
+  unarchive:
+    src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /tmp
+    remote_src: yes
+
+- name: Run AWS CLI installer.
+  become: true
+  command: /tmp/aws/install
+  args:
+    creates: /usr/local/bin/aws
