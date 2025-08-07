@@ -6,6 +6,6 @@
   roles:
     - utilities
     - docker
-    - spotify
+#    - spotify
     - vscode
     - aws_tools
