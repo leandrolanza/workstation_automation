@@ -1,15 +1,15 @@
 ---
-- name: Utilities - Update repo and cache.
+- name: Update repo and cache.
   apt:
     update_cache: yes
     cache_valid_time: 3600
 
-- name: Utilities - Upgrade all packages.
+- name: Upgrade all packages.
   apt:
     name: "*"
     state: latest
 
-- name: Utilities - Install packages.
+- name: Install packages.
   package:
     name: "{{ item }}"
     state: present

@@ -1,5 +1,5 @@
 ---
-- name: Docker - Dependencies installation.
+- name: Dependencies installation.
   apt:
     name:
       - ca-certificates
@@ -7,17 +7,17 @@
       - gnupg
     update_cache: yes
 
-- name: Docker - Add Docker GPG key.
+- name: Add Docker GPG key.
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
 
-- name: Docker - Add Docker repository.
+- name: Add Docker repository.
   apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
     state: present
 
-- name: Docker - Install Docker.
+- name: Install Docker.
   apt:
     name:
       - docker-ce
@@ -28,7 +28,7 @@
     update_cache: yes
     state: present
 
-- name: Docker - Add logged-in user to docker group.
+- name: Add logged-in user to docker group.
   become: true
   user:
     name: "{{ lookup('env', 'USER') }}"

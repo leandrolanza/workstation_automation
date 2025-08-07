@@ -1,0 +1,5 @@
+---
+- name: Instalar Spotify via Homebrew
+  homebrew_cask:
+    name: spotify
+    state: present
