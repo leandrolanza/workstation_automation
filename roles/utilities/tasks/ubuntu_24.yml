@@ -1,0 +1,28 @@
+---
+- name: Utilities - Update repo and cache.
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Utilities - Upgrade all packages.
+  apt:
+    name: "*"
+    state: latest
+
+- name: Utilities - Install packages.
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - curl
+    - wget
+    - git
+    - rdesktop
+    - tree
+    - vim
+    - screen
+    - nmap
+    - whois
+    - unzip
+    - make
+    - jq
