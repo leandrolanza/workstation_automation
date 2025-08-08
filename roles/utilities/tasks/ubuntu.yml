@@ -23,3 +23,5 @@
     - unzip
     - make
     - jq
+    - flameshot
+    - kazam

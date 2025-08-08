@@ -16,43 +16,62 @@
   debug:
     var: kubectl_version_output.stdout
 
-    # kubectx e kubens (instalados juntos)
-- name: Baixar e instalar kubectx
+- name: Download and install kubectx.
   get_url:
     url: https://github.com/ahmetb/kubectx/releases/latest/download/kubectx
     dest: /usr/local/bin/kubectx
     mode: '0755'
 
-- name: Baixar e instalar kubens
+- name: Download and install kubens.
   get_url:
     url: https://github.com/ahmetb/kubectx/releases/latest/download/kubens
     dest: /usr/local/bin/kubens
     mode: '0755'
 
-# kube-score
-- name: Baixar e instalar kube-score
+- name: Download and install kube-score.
   get_url:
-    url: https://github.com/zegl/kube-score/releases/latest/download/kube-score_{{ ansible_system | lower }}_amd64
+    url: https://github.com/zegl/kube-score/releases/download/v{{ kube_score_version }}/kube-score_{{ kube_score_version }}_linux_amd64
     dest: /usr/local/bin/kube-score
     mode: '0755'
+  vars:
+    kube_score_version: "1.20.0"
 
-# kube-capacity
-- name: Baixar e instalar kube-capacity
+- name: Download and install kube-capacity.
   get_url:
-    url: https://github.com/robscott/kube-capacity/releases/latest/download/kube-capacity-linux-amd64
+    url: https://github.com/robscott/kube-capacity/releases/download/v{{ kube_capacity_version }}/kube-capacity_v{{ kube_capacity_version }}_linux_x86_64.tar.gz
     dest: /usr/local/bin/kube-capacity
     mode: '0755'
+  vars:
+    kube_capacity_version: "0.8.0"
 
-# stern
-- name: Baixar e instalar stern
+- name: Download and install stern.
   get_url:
-    url: https://github.com/stern/stern/releases/latest/download/stern_{{ ansible_system | lower }}_amd64
+    url: https://github.com/stern/stern/releases/download/v{{ stern_version }}/stern_{{ stern_version }}_linux_amd64.tar.gz
     dest: /usr/local/bin/stern
     mode: '0755'
+  vars:
+    stern_version: "1.32.0"
 
-# kube-no-trouble (kubent)
-- name: Baixar e instalar kube-no-trouble
+- name: Download and install kube-no-trouble.
   get_url:
-    url: https://github.com/doitintl/kube-no-trouble/releases/latest/download/kubent-{{ ansible_system | lower }}-amd64
+    url: https://github.com/doitintl/kube-no-trouble/releases/download/v{{ kubent_version }}/kubent-{{ kubent_version }}-linux-amd64.tar.gz
     dest: /usr/local/bin/kubent
+    mode: '0755'
+  vars:
+    kubent_version: "0.7.3"
+
+
+- name: Download and install K9s.
+  get_url:
+    url: "https://github.com/derailed/k9s/releases/download/{{ k9s_version }}/k9s_Linux_amd64.tar.gz"
+    dest: "/tmp/k9s.tar.gz"
+    mode: '0644'
+  vars:
+    k9s_version: "v0.50.9"
+
+- name: Unarchive and install K9s.
+  unarchive:
+    src: "/tmp/k9s.tar.gz"
+    dest: "/usr/local/bin/"
+    remote_src: yes
     mode: '0755'
