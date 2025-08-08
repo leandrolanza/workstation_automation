@@ -54,12 +54,11 @@
 
 - name: Download and install kube-no-trouble.
   get_url:
-    url: https://github.com/doitintl/kube-no-trouble/releases/download/v{{ kubent_version }}/kubent-{{ kubent_version }}-linux-amd64.tar.gz
+    url: https://github.com/doitintl/kube-no-trouble/releases/download/{{ kubent_version }}/kubent-{{ kubent_version }}-linux-amd64.tar.gz
     dest: /usr/local/bin/kubent
     mode: '0755'
   vars:
     kubent_version: "0.7.3"
-
 
 - name: Download and install K9s.
   get_url:
@@ -75,3 +74,19 @@
     dest: "/usr/local/bin/"
     remote_src: yes
     mode: '0755'
+
+- name: Download and install Helm.
+  get_url:
+    url: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
+    dest: "/tmp/helm.tar.gz"
+    mode: '0644'
+  vars:
+    helm_version: "v3.17.4"
+
+- name: Unarchive and install Helm.
+  unarchive:
+    src: "/tmp/helm.tar.gz"
+    dest: "/usr/local/bin/"
+    remote_src: yes
+    mode: '0755'
+

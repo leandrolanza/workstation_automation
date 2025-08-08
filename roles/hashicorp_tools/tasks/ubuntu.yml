@@ -1,0 +1,24 @@
+---
+- name: Download and install Terraform.
+  get_url:
+    url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+    dest: /usr/local/bin/terraform
+    mode: '0755'
+  vars:
+    terraform_version: "v1.11.4"
+
+- name: Download and install Packer.
+  get_url:
+    url: https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_amd64.zip
+    dest: /usr/local/bin/packer
+    mode: '0755'
+  vars:
+    packer_version: "1.14.1"
+
+- name: Download and install Vault.
+  get_url:
+    url: https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip
+    dest: /usr/local/bin/vault
+    mode: '0755'
+  vars:
+    vault_version: "1.20.2"
