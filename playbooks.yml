@@ -5,7 +5,9 @@
   connection: local
   roles:
     - utilities
+    - network_tools
     - docker
+    - aws_tools
+    - kubernetes_tools
 #    - spotify
     - vscode
-    - aws_tools

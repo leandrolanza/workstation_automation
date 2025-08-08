@@ -12,42 +12,25 @@
   args:
     creates: /usr/local/bin/aws
 
-- name: Download kubectl (desired version)
-  get_url:
-    url: "https://s3.us-west-2.amazonaws.com/amazon-eks/{{ kubectl_version }}/bin/linux/amd64/kubectl"
-    dest: /usr/local/bin/kubectl
-    mode: '0755'
-  vars:
-    kubectl_version: "1.33.0/2025-05-01"
-
-- name: Verify if kubectl is installed correctly
-  command: kubectl version --client
-  register: kubectl_version_output
-  changed_when: false
-
-- name: Show kubectl version
-  debug:
-    var: kubectl_version_output.stdout
-
-- name: Add AWS VPN Client GPG key
+- name: Add AWS VPN Client GPG key.
   become: true
   apt_key:
     url: https://d20adtppz83p9s.cloudfront.net/GTK/latest/debian-repo/awsvpnclient_public_key.asc
     state: present
 
-- name: Add AWS VPN Client repository
+- name: Add AWS VPN Client repository.
   become: true
   apt_repository:
     repo: "deb [arch=amd64] https://d20adtppz83p9s.cloudfront.net/GTK/latest/debian-repo ubuntu main"
     filename: aws-vpn-client
     state: present
 
-- name: Update apt cache
+- name: Update apt cache.
   become: true
   apt:
     update_cache: yes
 
-- name: Install AWS VPN Client
+- name: Install AWS VPN Client.
   become: true
   apt:
     name: awsvpnclient

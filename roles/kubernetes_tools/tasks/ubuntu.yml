@@ -1,0 +1,58 @@
+---
+- name: Download kubectl (desired version).
+  get_url:
+    url: "https://s3.us-west-2.amazonaws.com/amazon-eks/{{ kubectl_version }}/bin/linux/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    mode: '0755'
+  vars:
+    kubectl_version: "1.33.0/2025-05-01"
+
+- name: Verify if kubectl is installed correctly.
+  command: kubectl version --client
+  register: kubectl_version_output
+  changed_when: false
+
+- name: Show kubectl version.
+  debug:
+    var: kubectl_version_output.stdout
+
+    # kubectx e kubens (instalados juntos)
+- name: Baixar e instalar kubectx
+  get_url:
+    url: https://github.com/ahmetb/kubectx/releases/latest/download/kubectx
+    dest: /usr/local/bin/kubectx
+    mode: '0755'
+
+- name: Baixar e instalar kubens
+  get_url:
+    url: https://github.com/ahmetb/kubectx/releases/latest/download/kubens
+    dest: /usr/local/bin/kubens
+    mode: '0755'
+
+# kube-score
+- name: Baixar e instalar kube-score
+  get_url:
+    url: https://github.com/zegl/kube-score/releases/latest/download/kube-score_{{ ansible_system | lower }}_amd64
+    dest: /usr/local/bin/kube-score
+    mode: '0755'
+
+# kube-capacity
+- name: Baixar e instalar kube-capacity
+  get_url:
+    url: https://github.com/robscott/kube-capacity/releases/latest/download/kube-capacity-linux-amd64
+    dest: /usr/local/bin/kube-capacity
+    mode: '0755'
+
+# stern
+- name: Baixar e instalar stern
+  get_url:
+    url: https://github.com/stern/stern/releases/latest/download/stern_{{ ansible_system | lower }}_amd64
+    dest: /usr/local/bin/stern
+    mode: '0755'
+
+# kube-no-trouble (kubent)
+- name: Baixar e instalar kube-no-trouble
+  get_url:
+    url: https://github.com/doitintl/kube-no-trouble/releases/latest/download/kubent-{{ ansible_system | lower }}-amd64
+    dest: /usr/local/bin/kubent
+    mode: '0755'
