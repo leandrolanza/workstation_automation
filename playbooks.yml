@@ -10,5 +10,5 @@
     - aws_tools
     - kubernetes_tools
     - hashicorp_tools
-#    - spotify
-    - vscode
+    - code_editor
+    - spotify

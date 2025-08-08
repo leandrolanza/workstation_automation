@@ -5,7 +5,7 @@
     dest: /usr/local/bin/terraform
     mode: '0755'
   vars:
-    terraform_version: "v1.11.4"
+    terraform_version: "1.11.4"
 
 - name: Download and install Packer.
   get_url:

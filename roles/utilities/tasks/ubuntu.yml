@@ -25,3 +25,8 @@
     - jq
     - flameshot
     - kazam
+
+- name: Install slack via snap.
+  snap:
+    name: slack
+    state: present

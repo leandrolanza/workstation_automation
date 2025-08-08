@@ -90,3 +90,21 @@
     remote_src: yes
     mode: '0755'
 
+- name: Add GPG key for Lens.
+  apt_key:
+    url: https://downloads.k8slens.dev/keys/gpg
+    state: present
+
+- name: Add Lens repository.
+  apt_repository:
+    repo: "deb [arch=amd64] https://downloads.k8slens.dev/apt/debian stable main"
+    state: present
+
+- name: Update APT cache.
+  apt:
+    update_cache: yes
+
+- name: Install Lens.
+  ansible.builtin.apt:
+    name: lens
+    state: present
