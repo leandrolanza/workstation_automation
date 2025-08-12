@@ -16,38 +16,33 @@
     state: present
     update_cache: yes
 
-- name: Cursor Dependencies installation.
-  apt:
-    name:
-      - curl
-      - libfuse2
-    update_cache: yes
-
-- name: Download Cursor AppImage.
-  get_url:
-    url: "{{ https://downloader.cursor.sh/linux/appImage/x64 }}"
-    dest: "/opt/cursor.appimage"
-    mode: '0755'
-
-- name: Download Cursor icon.
-  get_url:
-    url: "https://raw.githubusercontent.com/hieutt192/Cursor-ubuntu/main/images/cursor-icon.png"
-    dest: "/opt/cursor.png"
-    mode: '0644'
-
-- name: Create desktop entry for Cursor.
-  copy:
-    dest: "/usr/share/applications/cursor.desktop"
-    content: |
-      [Desktop Entry]
-      Name=Cursor AI IDE
-      Exec=/opt/cursor.appimage --no-sandbox
-      Icon=/opt/cursor.png
-      Type=Application
-      Categories=Development;
-    mode: '0644'
-
-- name: Update desktop database.
-  command: update-desktop-database
-  args:
-    warn: false
+#- name: Cursor Dependencies installation.
+#  apt:
+#    name:
+#      - curl
+#      - libfuse2
+#    update_cache: yes
+#
+#- name: Download Cursor AppImage.
+#  get_url:
+#    url: "{{ https://downloader.cursor.sh/linux/appImage/x64 }}"
+#    dest: "/opt/cursor.appimage"
+#    mode: '0755'
+#
+#- name: Download Cursor icon.
+#  get_url:
+#    url: "https://raw.githubusercontent.com/hieutt192/Cursor-ubuntu/main/images/cursor-icon.png"
+#    dest: "/opt/cursor.png"
+#    mode: '0644'
+#
+#- name: Create desktop entry for Cursor.
+#  copy:
+#    dest: "/usr/share/applications/cursor.desktop"
+#    content: |
+#      [Desktop Entry]
+#      Name=Cursor AI IDE
+#      Exec=/opt/cursor.appimage --no-sandbox
+#      Icon=/opt/cursor.png
+#      Type=Application
+#      Categories=Development;
+#    mode: '0644'
