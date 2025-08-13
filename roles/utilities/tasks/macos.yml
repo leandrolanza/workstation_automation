@@ -6,4 +6,8 @@
 
 - name: Apply all available updates
   ansible.builtin.command: softwareupdate -ia
-  become: true
+
+- name: Install Homebrew on macOS
+  community.general.homebrew:
+    name: homebrew
+    state: present

@@ -5,4 +5,4 @@
 
 - name: Include tasks for macOS.
   include_tasks: macos.yml
-  when: ansible_facts['system'] == 'Darwin'
+  when: ansible_distribution == 'MacOSX'
