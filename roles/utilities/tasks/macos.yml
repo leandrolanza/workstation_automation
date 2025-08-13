@@ -7,7 +7,9 @@
 - name: Apply all available updates
   ansible.builtin.command: softwareupdate -ia
 
-- name: Install Homebrew on macOS
-  community.general.homebrew:
-    name: homebrew
-    state: present
+- name: Install Homebrew on macOS (if not exists)
+  ansible.builtin.shell: |
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  args:
+    creates: /opt/homebrew/bin/brew
+  become: false
