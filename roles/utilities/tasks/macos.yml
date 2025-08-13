@@ -1,5 +1,4 @@
 ---
-
 - name: Search for macOS updates
   ansible.builtin.command: softwareupdate -l
   register: updates_list
@@ -14,9 +13,8 @@
     creates: /opt/homebrew/bin/brew
   become: false
 
-- name: Install Install packages.
+- name: Install packages via Homebrew.
   community.general.homebrew:
-  package:
     name: "{{ item }}"
     state: present
   with_items:

@@ -25,8 +25,20 @@
     - jq
     - flameshot
     - kazam
+    - tilix
+    - zsh
 
-- name: Install slack via snap.
+- name: Set Zsh as default shell for current user.
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  become: true
+
+
+- name: Install packages via snap.
   snap:
-    name: slack
+    name: "{{ item }}"
     state: present
+  with_items:
+    - slack
+    - postman
