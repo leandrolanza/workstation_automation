@@ -1,0 +1,9 @@
+---
+
+- name: Search for macOS updates
+  ansible.builtin.command: softwareupdate -l
+  register: updates_list
+
+- name: Apply all available updates
+  ansible.builtin.command: softwareupdate -ia
+  become: true

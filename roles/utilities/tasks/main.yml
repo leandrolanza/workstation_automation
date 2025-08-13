@@ -3,10 +3,6 @@
   include_tasks: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
-#- name: Include tasks for Ubuntu 24.04
-#  include_tasks: ubuntu_24.yml
-#  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('24.04', '==')
-
 - name: Include tasks for macOS.
   include_tasks: macos.yml
   when: ansible_facts['system'] == 'Darwin'
