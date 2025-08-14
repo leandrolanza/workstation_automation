@@ -4,6 +4,7 @@
     real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
 
 - name: Download kubectl (desired version).
+  become_user: "{{ real_user }}"
   get_url:
     url: "https://s3.us-west-2.amazonaws.com/amazon-eks/{{ kubectl_version }}/bin/linux/amd64/kubectl"
     dest: /usr/local/bin/kubectl
