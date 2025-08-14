@@ -1,9 +1,15 @@
 ---
+- name: Set real user (not root).
+  set_fact:
+    real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+
 - name: Download and install Terraform.
   get_url:
     url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
     dest: /usr/local/bin/terraform
     mode: '0755'
+    owner: "{{ real_user }}"
+    group: "{{ real_user }}"
   vars:
     terraform_version: "1.11.4"
 
@@ -12,6 +18,8 @@
     url: https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_linux_amd64.zip
     dest: /usr/local/bin/packer
     mode: '0755'
+    owner: "{{ real_user }}"
+    group: "{{ real_user }}"
   vars:
     packer_version: "1.14.1"
 
@@ -20,5 +28,7 @@
     url: https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_linux_amd64.zip
     dest: /usr/local/bin/vault
     mode: '0755'
+    owner: "{{ real_user }}"
+    group: "{{ real_user }}"
   vars:
     vault_version: "1.20.2"
