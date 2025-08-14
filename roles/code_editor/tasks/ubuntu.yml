@@ -1,48 +1,23 @@
----
-- name: Add VSCode GPG key.
-  apt_key:
-    url: https://packages.microsoft.com/keys/microsoft.asc
-    state: present
+- name: Ensure /etc/apt/keyrings exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
 
-- name: Add VSCode repository.
+- name: Download VSCode GPG key
+  get_url:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    dest: /etc/apt/keyrings/microsoft.asc
+    mode: '0644'
+
+- name: Add VSCode repository
   apt_repository:
-    repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
     state: present
     filename: vscode
 
-- name: Install VSCode.
+- name: Install VSCode
   apt:
     name: code
     state: present
     update_cache: yes
-
-#- name: Cursor Dependencies installation.
-#  apt:
-#    name:
-#      - curl
-#      - libfuse2
-#    update_cache: yes
-#
-#- name: Download Cursor AppImage.
-#  get_url:
-#    url: "{{ https://downloader.cursor.sh/linux/appImage/x64 }}"
-#    dest: "/opt/cursor.appimage"
-#    mode: '0755'
-#
-#- name: Download Cursor icon.
-#  get_url:
-#    url: "https://raw.githubusercontent.com/hieutt192/Cursor-ubuntu/main/images/cursor-icon.png"
-#    dest: "/opt/cursor.png"
-#    mode: '0644'
-#
-#- name: Create desktop entry for Cursor.
-#  copy:
-#    dest: "/usr/share/applications/cursor.desktop"
-#    content: |
-#      [Desktop Entry]
-#      Name=Cursor AI IDE
-#      Exec=/opt/cursor.appimage --no-sandbox
-#      Icon=/opt/cursor.png
-#      Type=Application
-#      Categories=Development;
-#    mode: '0644'

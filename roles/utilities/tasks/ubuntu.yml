@@ -69,3 +69,27 @@
   with_items:
     - slack
     - postman
+
+- name: Ensure /etc/apt/keyrings exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download Google Chrome GPG key
+  get_url:
+    url: https://dl.google.com/linux/linux_signing_key.pub
+    dest: /etc/apt/keyrings/google-chrome.asc
+    mode: '0644'
+
+- name: Add Google Chrome repository
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.asc] http://dl.google.com/linux/chrome/deb stable main"
+    state: present
+    filename: google-chrome
+
+- name: Install Google Chrome
+  apt:
+    name: google-chrome-stable
+    state: present
+    update_cache: yes
