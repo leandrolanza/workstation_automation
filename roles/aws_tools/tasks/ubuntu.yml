@@ -19,29 +19,24 @@
     state: directory
     mode: '0755'
 
-- name: Remove old AWS VPN Client repository file if exists.
-  become: true
-  file:
-    path: /etc/apt/sources.list.d/aws-vpn-client.list
-    state: absent
+- name: Download and install AWS VPN Client public key
+  shell: |
+    wget -qO - https://d20adtppz83p9s.cloudfront.net/GTK/latest/debian-repo/awsvpnclient_public_key.asc \
+    | gpg --dearmor -o /etc/apt/keyrings/aws-vpn-client.gpg
+  args:
+    creates: /etc/apt/keyrings/aws-vpn-client.gpg
 
-- name: Download AWS VPN Client GPG key.
-  become: true
-  get_url:
-    url: https://d20adtppz83p9s.cloudfront.net/GTK/latest/debian-repo/awsvpnclient_public_key.asc
-    dest: /etc/apt/keyrings/aws-vpn-client.gpg
+- name: Add AWS VPN Client repository
+  copy:
+    dest: /etc/apt/sources.list.d/aws-vpn-client.list
+    content: "deb [arch=amd64 signed-by=/etc/apt/keyrings/aws-vpn-client.gpg] https://d20adtppz83p9s.cloudfront.net/GTK/latest/debian-repo ubuntu main"
     mode: '0644'
 
-- name: Add AWS VPN Client repository.
-  become: true
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/aws-vpn-client.gpg] https://d20adtppz83p9s.cloudfront.net/GTK/latest/debian-repo ubuntu main"
-    filename: aws-vpn-client
-    state: present
+- name: Update apt cache
+  apt:
+    update_cache: yes
 
-- name: Install AWS VPN Client.
-  become: true
+- name: Install AWS VPN Client
   apt:
     name: awsvpnclient
     state: present
-    update_cache: yes
