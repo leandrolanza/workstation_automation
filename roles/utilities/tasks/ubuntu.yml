@@ -28,12 +28,39 @@
     - tilix
     - zsh
 
-- name: Set Zsh as default shell for current user.
-  user:
-    name: "{{ ansible_user_id }}"
-    shell: /usr/bin/zsh
-  become: true
+- name: Set real user (not root).
+  set_fact:
+    real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
 
+- name: Set Zsh as default shell for real user
+  become: true
+  user:
+    name: "{{ real_user }}"
+    shell: /usr/bin/zsh
+
+- name: Install Oh My Zsh for real user (if not exists).
+  become: true
+  become_user: "{{ real_user }}"
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  args:
+    executable: /bin/bash
+    creates: "/home/{{ real_user }}/.oh-my-zsh"
+
+- name: Install plugin zsh-autosuggestions.
+  become: false
+  become_user: "{{ real_user }}"
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
+    dest: "/home/{{ real_user }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    version: master
+
+- name: Activate plugin zsh-autosuggestions in .zshrc.
+  become: false
+  become_user: "{{ real_user }}"
+  lineinfile:
+    path: "/home/{{ real_user }}/.zshrc"
+    regexp: '^plugins='
+    line: 'plugins=(git zsh-autosuggestions)'
 
 - name: Install packages via snap.
   snap:
