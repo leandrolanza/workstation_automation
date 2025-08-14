@@ -92,8 +92,3 @@
     path: "/tmp/*"
     state: absent
     force: yes
-
-- name: Remove all content of /tmp without deleting the directory.
-  shell: rm -rf /tmp/*
-  args:
-    warn: false

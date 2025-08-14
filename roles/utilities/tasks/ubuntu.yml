@@ -82,6 +82,11 @@
     dest: /etc/apt/keyrings/google-chrome.asc
     mode: '0644'
 
+- name: Remove old Google Chrome repository file if exists
+  file:
+    path: /etc/apt/sources.list.d/google-chrome.list
+    state: absent
+
 - name: Add Google Chrome repository
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.asc] http://dl.google.com/linux/chrome/deb stable main"

@@ -1,22 +1,37 @@
-- name: Ensure /etc/apt/keyrings exists
+- name: Ensure /etc/apt/keyrings exists.
   file:
     path: /etc/apt/keyrings
     state: directory
     mode: '0755'
 
-- name: Download VSCode GPG key
+- name: Remove any old VSCode repo definitions.
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/apt/sources.list.d/vscode.list
+    - /etc/apt/sources.list.d/code.list
+
+- name: Remove any old Microsoft keyrings.
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /usr/share/keyrings/microsoft.gpg
+
+- name: Download VSCode GPG key.
   get_url:
     url: https://packages.microsoft.com/keys/microsoft.asc
     dest: /etc/apt/keyrings/microsoft.asc
     mode: '0644'
 
-- name: Add VSCode repository
+- name: Add VSCode repository.
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
     state: present
     filename: vscode
 
-- name: Install VSCode
+- name: Install VSCode.
   apt:
     name: code
     state: present

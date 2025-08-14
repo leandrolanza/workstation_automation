@@ -179,21 +179,31 @@
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
 
-- name: Add GPG key for Lens.
-  apt_key:
+- name: Ensure /etc/apt/keyrings exists.
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Remove old Lens repository file if exists.
+  file:
+    path: /etc/apt/sources.list.d/lens.list
+    state: absent
+
+- name: Download Lens GPG key.
+  get_url:
     url: https://downloads.k8slens.dev/keys/gpg
-    state: present
+    dest: /etc/apt/keyrings/lens.gpg
+    mode: '0644'
 
 - name: Add Lens repository.
   apt_repository:
-    repo: "deb [arch=amd64] https://downloads.k8slens.dev/apt/debian stable main"
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/lens.gpg] https://downloads.k8slens.dev/apt/debian stable main"
     state: present
-
-- name: Update APT cache.
-  apt:
-    update_cache: yes
+    filename: lens
 
 - name: Install Lens.
-  ansible.builtin.apt:
+  apt:
     name: lens
     state: present
+    update_cache: yes

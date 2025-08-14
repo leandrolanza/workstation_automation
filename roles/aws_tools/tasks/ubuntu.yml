@@ -12,26 +12,36 @@
   args:
     creates: /usr/local/bin/aws
 
-- name: Add AWS VPN Client GPG key.
+- name: Ensure /etc/apt/keyrings exists.
   become: true
-  apt_key:
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Remove old AWS VPN Client repository file if exists.
+  become: true
+  file:
+    path: /etc/apt/sources.list.d/aws-vpn-client.list
+    state: absent
+
+- name: Download AWS VPN Client GPG key.
+  become: true
+  get_url:
     url: https://d20adtppz83p9s.cloudfront.net/GTK/latest/debian-repo/awsvpnclient_public_key.asc
-    state: present
+    dest: /etc/apt/keyrings/aws-vpn-client.gpg
+    mode: '0644'
 
 - name: Add AWS VPN Client repository.
   become: true
   apt_repository:
-    repo: "deb [arch=amd64] https://d20adtppz83p9s.cloudfront.net/GTK/latest/debian-repo ubuntu main"
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/aws-vpn-client.gpg] https://d20adtppz83p9s.cloudfront.net/GTK/latest/debian-repo ubuntu main"
     filename: aws-vpn-client
     state: present
-
-- name: Update apt cache.
-  become: true
-  apt:
-    update_cache: yes
 
 - name: Install AWS VPN Client.
   become: true
   apt:
     name: awsvpnclient
     state: present
+    update_cache: yes
