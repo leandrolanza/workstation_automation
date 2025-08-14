@@ -4,10 +4,9 @@
     real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
 
 - name: Download kubectl (desired version).
-  become_user: "{{ real_user }}"
   get_url:
     url: "https://s3.us-west-2.amazonaws.com/amazon-eks/{{ kubectl_version }}/bin/linux/amd64/kubectl"
-    dest: /usr/local/bin/kubectl
+    dest: "/usr/local/bin/kubectl"
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
@@ -49,35 +48,89 @@
   vars:
     kube_score_version: "1.20.0"
 
-- name: Download and install kube-capacity.
+- name: Download kube-capacity.
   get_url:
     url: https://github.com/robscott/kube-capacity/releases/download/v{{ kube_capacity_version }}/kube-capacity_v{{ kube_capacity_version }}_linux_x86_64.tar.gz
-    dest: /usr/local/bin/kube-capacity
+    dest: "/tmp/kube-capacity_v{{ kube_capacity_version }}_linux_x86_64.tar.gz"
+    mode: '0644'
+  vars:
+    kube_capacity_version: "0.8.0"
+
+- name: Unzip kube-capacity.
+  unarchive:
+    src: "/tmp/kube-capacity_v{{ kube_capacity_version }}_linux_x86_64.tar.gz"
+    dest: "/tmp"
+    remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
   vars:
     kube_capacity_version: "0.8.0"
 
-- name: Download and install stern.
+- name: kube-capacity Install.
+  copy:
+    remote_src: yes
+    src: "/tmp/kube-capacity"
+    dest: "/usr/local/bin/"
+    mode: '0755'
+    owner: "{{ real_user }}"
+    group: "{{ real_user }}"
+
+- name: Download stern.
   get_url:
     url: https://github.com/stern/stern/releases/download/v{{ stern_version }}/stern_{{ stern_version }}_linux_amd64.tar.gz
-    dest: /usr/local/bin/stern
+    dest: "/tmp/stern_{{ stern_version }}_linux_amd64.tar.gz"
+    mode: '0644'
+  vars:
+    stern_version: "1.32.0"
+
+- name: Unzip stern.
+  unarchive:
+    src: "/tmp/stern_{{ stern_version }}_linux_amd64.tar.gz"
+    dest: "/tmp"
+    remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
   vars:
     stern_version: "1.32.0"
 
-- name: Download and install kube-no-trouble.
+- name: stern Install.
+  copy:
+    remote_src: yes
+    src: "/tmp/stern"
+    dest: "/usr/local/bin/"
+    mode: '0755'
+    owner: "{{ real_user }}"
+    group: "{{ real_user }}"
+
+- name: Download kube-no-trouble.
   get_url:
     url: https://github.com/doitintl/kube-no-trouble/releases/download/{{ kubent_version }}/kubent-{{ kubent_version }}-linux-amd64.tar.gz
-    dest: /usr/local/bin/kubent
+    dest: "/tmp/kubent-{{ kubent_version }}-linux-amd64.tar.gz"
+    mode: '0644'
+  vars:
+    kubent_version: "0.7.3"
+
+- name: Unzip kube-no-trouble.
+  unarchive:
+    src: "/tmp/kubent-{{ kubent_version }}-linux-amd64.tar.gz"
+    dest: "/tmp"
+    remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
   vars:
     kubent_version: "0.7.3"
+
+- name: kube-no-trouble Install.
+  copy:
+    remote_src: yes
+    src: "/tmp/kubent"
+    dest: "/usr/local/bin/"
+    mode: '0755'
+    owner: "{{ real_user }}"
+    group: "{{ real_user }}"
 
 - name: Download and install K9s.
   get_url:
@@ -98,21 +151,30 @@
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
 
-- name: Download and install Helm.
+- name: Download Helm.
   get_url:
     url: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
-    dest: "/tmp/helm.tar.gz"
+    dest: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
     mode: '0644'
+  vars:
+    helm_version: "v3.17.4"
+
+- name: Unarchive Helm.
+  unarchive:
+    src: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
+    dest: "/tmp"
+    remote_src: yes
+    mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
   vars:
     helm_version: "v3.17.4"
 
-- name: Unarchive and install Helm.
-  unarchive:
-    src: "/tmp/helm.tar.gz"
-    dest: "/usr/local/bin/"
+- name: Helm Install.
+  copy:
     remote_src: yes
+    src: "/tmp/linux-amd64/helm"
+    dest: "/usr/local/bin/"
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
