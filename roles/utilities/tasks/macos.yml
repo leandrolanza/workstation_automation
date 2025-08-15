@@ -12,18 +12,3 @@
   args:
     creates: /opt/homebrew/bin/brew
   become: false
-
-- name: Install packages via Homebrew.
-  community.general.homebrew:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - curl
-    - wget
-    - git
-    - tree
-    - vim
-    - unzip
-    - make
-    - jq
-    - flameshot

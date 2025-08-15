@@ -32,7 +32,7 @@
   set_fact:
     real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
 
-- name: Set Zsh as default shell for real user
+- name: Set Zsh as default shell for real user.
   become: true
   user:
     name: "{{ real_user }}"
@@ -70,30 +70,30 @@
     - slack
     - postman
 
-- name: Ensure /etc/apt/keyrings exists
+- name: Ensure /etc/apt/keyrings exists.
   file:
     path: /etc/apt/keyrings
     state: directory
     mode: '0755'
 
-- name: Download Google Chrome GPG key
+- name: Download Google Chrome GPG key.
   get_url:
     url: https://dl.google.com/linux/linux_signing_key.pub
     dest: /etc/apt/keyrings/google-chrome.asc
     mode: '0644'
 
-- name: Remove old Google Chrome repository file if exists
+- name: Remove old Google Chrome repository file if exists.
   file:
     path: /etc/apt/sources.list.d/google-chrome.list
     state: absent
 
-- name: Add Google Chrome repository
+- name: Add Google Chrome repository.
   apt_repository:
     repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/google-chrome.asc] http://dl.google.com/linux/chrome/deb stable main"
     state: present
     filename: google-chrome
 
-- name: Install Google Chrome
+- name: Install Google Chrome.
   apt:
     name: google-chrome-stable
     state: present
