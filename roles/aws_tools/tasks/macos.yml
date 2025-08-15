@@ -1,8 +1,15 @@
-- name: Docker - Install Docker via Homebrew.
-  homebrew:
-    name: docker
-    state: present
+---
+- name: Download AWS CLI v2 installer.
+  get_url:
+    url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /tmp/awscliv2.zip
+    mode: '0644'
 
-- name: Docker - Warning about Docker Desktop.
-  debug:
-    msg: "Docker Desktop installation must be done manually on macOS Catalina."
+- name: Unzip AWS CLI installer.
+  unarchive:
+    src: /tmp/awscliv2.zip
+    dest: /tmp
+    remote_src: yes
+
+- name: Install AWS CLI v2.
+  command: /tmp/aws/install
