@@ -190,20 +190,23 @@
     path: /etc/apt/sources.list.d/lens.list
     state: absent
 
-- name: Download Lens GPG key.
-  get_url:
-    url: https://downloads.k8slens.dev/keys/gpg
-    dest: /etc/apt/keyrings/lens.gpg
-    mode: '0644'
+- name: Download Lens GPG key and convert to binary format.
+  shell: |
+    curl -fsSL https://downloads.k8slens.dev/keys/gpg | gpg --dearmor -o /etc/apt/keyrings/lens.gpg
+  args:
+    creates: /etc/apt/keyrings/lens.gpg
 
 - name: Add Lens repository.
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/lens.gpg] https://downloads.k8slens.dev/apt/debian stable main"
-    state: present
-    filename: lens
+  copy:
+    dest: /etc/apt/sources.list.d/lens.list
+    content: "deb [arch=amd64 signed-by=/etc/apt/keyrings/lens.gpg] https://downloads.k8slens.dev/apt/debian stable main"
+    mode: '0644'
+
+- name: Update apt cache.
+  apt:
+    update_cache: yes
 
 - name: Install Lens.
   apt:
     name: lens
     state: present
-    update_cache: yes
