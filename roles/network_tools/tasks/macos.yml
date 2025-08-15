@@ -7,9 +7,7 @@
   loop:
     - inetutils
     - whois
-    - iputils
     - bind
-    - traceroute
     - tcpdump
     - freerdp
     - nmap

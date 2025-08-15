@@ -1,8 +1,6 @@
-- name: Docker - Install Docker via Homebrew.
-  homebrew:
+---
+- name: Install Docker Desktop via Homebrew Cask.
+  community.general.homebrew_cask:
     name: docker
     state: present
-
-- name: Docker - Warning about Docker Desktop.
-  debug:
-    msg: "Docker Desktop installation must be done manually on macOS Catalina."
+  become: false
