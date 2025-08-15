@@ -1,5 +1,5 @@
 ---
 - name: Install VSCode via Homebrew.
-  homebrew_cask:
+  community.general.homebrew_cask:
     name: visual-studio-code
     state: present
