@@ -3,6 +3,7 @@
   homebrew:
     name: "{{ item }}"
     state: present
+  become: false
   with_items:
     - net-tools
     - whois
