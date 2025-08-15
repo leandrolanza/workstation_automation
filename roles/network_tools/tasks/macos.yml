@@ -1,15 +1,15 @@
 ---
 - name: Install network tools.
-  homebrew:
+  community.general.homebrew:
     name: "{{ item }}"
     state: present
   become: false
-  with_items:
-    - net-tools
+  loop:
+    - inetutils
     - whois
-    - iputils-ping
-    - dnsutils
+    - iputils
+    - bind
     - traceroute
     - tcpdump
-    - rdesktop
+    - freerdp
     - nmap
