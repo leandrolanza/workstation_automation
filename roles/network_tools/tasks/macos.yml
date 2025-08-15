@@ -1,7 +1,6 @@
 ---
 - name: Install network tools.
   community.general.homebrew:
-  package:
     name: "{{ item }}"
     state: present
   with_items:
