@@ -58,15 +58,15 @@
 
 - name: Download kube-capacity.
   get_url:
-    url: https://github.com/robscott/kube-capacity/releases/download/v{{ kube_capacity_version }}/kube-capacity_v{{ kube_capacity_version }}_darwin_x86_64.tar
-    dest: "/tmp/kube-capacity_v{{ kube_capacity_version }}_darwin_x86_64.tar"
+    url: https://github.com/robscott/kube-capacity/releases/download/{{ kube_capacity_version }}/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar.gz
+    dest: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
     mode: '0644'
   vars:
-    kube_capacity_version: "0.8.0"
+    kube_capacity_version: "v0.8.0"
 
 - name: Unzip kube-capacity.
   unarchive:
-    src: "/tmp/kube-capacity_v{{ kube_capacity_version }}_darwin_x86_64.tar"
+    src: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
     dest: "/tmp"
     remote_src: yes
     mode: '0755'
