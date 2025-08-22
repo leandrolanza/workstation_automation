@@ -8,11 +8,11 @@
 - name: Install AWS CLI v2.
   command: installer -pkg /tmp/AWSCLIV2.pkg -target /
   args:
-    creates: /usr/local/aws-cli/v2/current/bin/aws
+    creates: /usr/local/aws-cli/aws
 
 - name: Ensure symlink /usr/local/bin/aws -> real AWS CLI binary.
   file:
-    src: "/usr/local/aws-cli/v2/current/bin/aws"
+    src: "/usr/local/aws-cli/aws"
     dest: "/usr/local/bin/aws"
     state: link
     force: yes
