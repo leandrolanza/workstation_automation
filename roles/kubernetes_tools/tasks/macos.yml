@@ -1,8 +1,23 @@
-- name: Docker - Install Docker via Homebrew.
-  homebrew:
-    name: docker
-    state: present
+---
+- name: Set real user (not root).
+  set_fact:
+    real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
 
-- name: Docker - Warning about Docker Desktop.
+- name: Download kubectl (desired version).
+  get_url:
+    url: "https://s3.us-west-2.amazonaws.com/amazon-eks/{{ kubectl_version }}/bin/darwin/amd64/kubectl"
+    dest: "/usr/local/bin/kubectl"
+    mode: '0755'
+    owner: "{{ real_user }}"
+    group: "{{ real_user }}"
+  vars:
+    kubectl_version: "1.33.0/2025-08-03"
+
+- name: Verify if kubectl is installed correctly.
+  command: kubectl version --client
+  register: kubectl_version_output
+  changed_when: false
+
+- name: Show kubectl version.
   debug:
-    msg: "Docker Desktop installation must be done manually on macOS Catalina."
+    var: kubectl_version_output.stdout
