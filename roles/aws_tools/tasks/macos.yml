@@ -1,9 +1,49 @@
 ---
-- name: Download AWS CLI v2 (macOS Intel)
+- name: Download AWS CLI v2 (macOS Intel).
   get_url:
     url: https://awscli.amazonaws.com/AWSCLIV2.pkg
     dest: /tmp/AWSCLIV2.pkg
     mode: '0644'
 
-- name: Install AWS CLI v2 (macOS Intel)
-  command: sudo installer -pkg /tmp/AWSCLIV2.pkg -target /
+- name: Install AWS CLI v2.
+  command: installer -pkg /tmp/AWSCLIV2.pkg -target /
+  args:
+    creates: /usr/local/bin/aws
+
+- name: Check aws binary path.
+  command: which aws
+  register: aws_path
+  changed_when: false
+
+- name: Show aws path.
+  debug:
+    msg: "AWS CLI installed in: {{ aws_path.stdout }}"
+
+- name: Check AWS CLI version.
+  command: aws --version
+  register: aws_version
+  changed_when: false
+
+- name: Show AWS CLI version.
+  debug:
+    msg: "Installed version: {{ aws_version.stdout }}"
+
+- name: Download AWS VPN Client.
+  get_url:
+    url: https://d20adtppz83p9s.cloudfront.net/OSX/latest/AWS_VPN_Client.pkg
+    dest: /tmp/AWS_VPN_Client.pkg
+    mode: '0644'
+
+- name: Install AWS VPN Client.
+  command: installer -pkg /tmp/AWS_VPN_Client.pkg -target /
+  args:
+    creates: /Applications/AWS\ VPN\ Client.app
+
+- name: Check if AWS VPN Client was installed.
+  stat:
+    path: "/Applications/AWS VPN Client.app"
+  register: vpn_client
+
+- name: Show AWS VPN Client status.
+  debug:
+    msg: "AWS VPN Client installed? {{ vpn_client.stat.exists }}"
