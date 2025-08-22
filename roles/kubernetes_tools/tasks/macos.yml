@@ -9,7 +9,7 @@
     follow: false
   register: kubectl_stat
 
-- name: Remove /usr/local/bin/kubectl if it is a symlink (Docker Desktop).
+- name: Remove /usr/local/bin/kubectl if it is a symlink.
   file:
     path: /usr/local/bin/kubectl
     state: absent
@@ -18,18 +18,11 @@
 - name: Download kubectl (desired version).
   get_url:
     url: "https://s3.us-west-2.amazonaws.com/amazon-eks/{{ kubectl_version }}/bin/darwin/amd64/kubectl"
-    dest: "/usr/local/bin/kubectl-eks-{{ kubectl_version }}"
+    dest: "/usr/local/bin/kubectl"
     mode: '0755'
     owner: "{{ real_user }}"
   vars:
     kubectl_version: "1.33.3/2025-08-03"
-
-- name: Point /usr/local/bin/kubectl to EKS kubectl.
-  file:
-    src: "/usr/local/bin/kubectl-eks-{{ kubectl_version }}"
-    dest: /usr/local/bin/kubectl
-    state: link
-    force: yes
 
 - name: Verify if kubectl is installed correctly.
   command: kubectl version --client
@@ -39,3 +32,15 @@
 - name: Show kubectl version.
   debug:
     var: kubectl_version_output.stdout
+
+- name: Install packages via Homebrew.
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: present
+  become: false
+  loop:
+    - kubectx
+    - kubens
+    - kube-score
+    - kube-capacity
+    - stern

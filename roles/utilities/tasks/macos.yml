@@ -3,8 +3,8 @@
   ansible.builtin.command: softwareupdate -l
   register: updates_list
 
-- name: Apply all available updates.
-  ansible.builtin.command: softwareupdate -i -a
+#- name: Apply all available updates.
+#  ansible.builtin.command: softwareupdate -i -a
 
 - name: Install Homebrew on macOS (if not exists).
   ansible.builtin.shell: |
