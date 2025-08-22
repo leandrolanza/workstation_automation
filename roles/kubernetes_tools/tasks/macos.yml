@@ -62,31 +62,21 @@
     state: present
   become: false
 
-#- name: Download kube-capacity.
-#  get_url:
-#    url: https://github.com/robscott/kube-capacity/releases/download/{{ kube_capacity_version }}/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar.gz
-#    dest: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
-#    mode: '0644'
-#  vars:
-#    kube_capacity_version: "v0.8.0"
-#
-#- name: Unzip kube-capacity.
-#  unarchive:
-#    src: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
-#    dest: "/tmp"
-#    remote_src: yes
-#    mode: '0755'
-#    owner: "{{ real_user }}"
-#  vars:
-#    kube_capacity_version: "v0.8.0"
-#
-#- name: kube-capacity Install.
-#  copy:
-#    remote_src: yes
-#    src: "/tmp/kube-capacity"
-#    dest: "/usr/local/bin/"
-#    mode: '0755'
-#    owner: "{{ real_user }}"
+- name: Download kube-capacity.
+  get_url:
+    url: https://github.com/robscott/kube-capacity/releases/download/{{ kube_capacity_version }}/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar.gz
+    dest: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
+    mode: '0644'
+  vars:
+    kube_capacity_version: "v0.8.0"
+
+- name: Extract kube-capacity.
+  command: >
+    tar -xzf /tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar -C /usr/local/bin
+  args:
+    creates: "/usr/local/bin/kube-capacity"
+  vars:
+    kube_capacity_version: "v0.8.0"
 
 - name: Download stern.
   get_url:
@@ -96,23 +86,13 @@
   vars:
     stern_version: "1.32.0"
 
-- name: Unzip stern.
-  unarchive:
-    src: "/tmp/stern_{{ stern_version }}_darwin_amd64.tar.gz"
-    dest: "/tmp"
-    remote_src: yes
-    mode: '0755'
-    owner: "{{ real_user }}"
+- name: Extract stern.
+  command: >
+    tar -xzf /tmp/stern_{{ stern_version }}_darwin_amd64.tar.gz -C /usr/local/bin
+  args:
+    creates: "/usr/local/bin/stern"
   vars:
     stern_version: "1.32.0"
-
-- name: stern Install.
-  copy:
-    remote_src: yes
-    src: "/tmp/stern"
-    dest: "/usr/local/bin/"
-    mode: '0755'
-    owner: "{{ real_user }}"
 
 - name: Download kube-no-trouble.
   get_url:
@@ -183,54 +163,21 @@
     mode: '0755'
     owner: "{{ real_user }}"
 
+- name: Download Lens .dmg.
+  get_url:
+    url: "https://api.k8slens.dev/binaries/Lens-2025.8.121212-latest.dmg"
+    dest: "/tmp/Lens.dmg"
+    mode: '0644'
 
+- name: Mount the dmg.
+  command: hdiutil attach /tmp/Lens.dmg -nobrowse -quiet
+  register: hdiutil_output
 
+- name: Copy Lens.app to /Applications.
+  command: cp -r "/Volumes/Lens/Lens.app" /Applications/
+  args:
+    creates: /Applications/Lens.app
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
-#- name: Ensure /etc/apt/keyrings exists.
-#  file:
-#    path: /etc/apt/keyrings
-#    state: directory
-#    mode: '0755'
-#
-#- name: Remove old Lens repository file if exists.
-#  file:
-#    path: /etc/apt/sources.list.d/lens.list
-#    state: absent
-#
-#- name: Download Lens GPG key and convert to binary format.
-#  shell: |
-#    curl -fsSL https://downloads.k8slens.dev/keys/gpg | gpg --dearmor -o /etc/apt/keyrings/lens.gpg
-#  args:
-#    creates: /etc/apt/keyrings/lens.gpg
-#
-#- name: Add Lens repository.
-#  copy:
-#    dest: /etc/apt/sources.list.d/lens.list
-#    content: "deb [arch=amd64 signed-by=/etc/apt/keyrings/lens.gpg] https://downloads.k8slens.dev/apt/debian stable main"
-#    mode: '0644'
-#
-#
-#- name: Install Lens.
-#  apt:
-#    name: lens
-#    state: present
-#
+- name: Unmount the dmg.
+  command: hdiutil detach "/Volumes/Lens"
+  ignore_errors: yes
