@@ -72,7 +72,7 @@
     mode: '0755'
     owner: "{{ real_user }}"
   vars:
-    kube_capacity_version: "0.8.0"
+    kube_capacity_version: "v0.8.0"
 
 - name: kube-capacity Install.
   copy:
