@@ -56,31 +56,37 @@
   vars:
     kube_score_version: "1.20.0"
 
-- name: Download kube-capacity.
-  get_url:
-    url: https://github.com/robscott/kube-capacity/releases/download/{{ kube_capacity_version }}/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar.gz
-    dest: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
-    mode: '0644'
-  vars:
-    kube_capacity_version: "v0.8.0"
+- name: Install kube-capacity via Homebrew.
+  community.general.homebrew:
+    name: "kube-capacity"
+    state: present
+  become: false
 
-- name: Unzip kube-capacity.
-  unarchive:
-    src: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
-    dest: "/tmp"
-    remote_src: yes
-    mode: '0755'
-    owner: "{{ real_user }}"
-  vars:
-    kube_capacity_version: "v0.8.0"
-
-- name: kube-capacity Install.
-  copy:
-    remote_src: yes
-    src: "/tmp/kube-capacity"
-    dest: "/usr/local/bin/"
-    mode: '0755'
-    owner: "{{ real_user }}"
+#- name: Download kube-capacity.
+#  get_url:
+#    url: https://github.com/robscott/kube-capacity/releases/download/{{ kube_capacity_version }}/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar.gz
+#    dest: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
+#    mode: '0644'
+#  vars:
+#    kube_capacity_version: "v0.8.0"
+#
+#- name: Unzip kube-capacity.
+#  unarchive:
+#    src: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
+#    dest: "/tmp"
+#    remote_src: yes
+#    mode: '0755'
+#    owner: "{{ real_user }}"
+#  vars:
+#    kube_capacity_version: "v0.8.0"
+#
+#- name: kube-capacity Install.
+#  copy:
+#    remote_src: yes
+#    src: "/tmp/kube-capacity"
+#    dest: "/usr/local/bin/"
+#    mode: '0755'
+#    owner: "{{ real_user }}"
 
 - name: Download stern.
   get_url:
