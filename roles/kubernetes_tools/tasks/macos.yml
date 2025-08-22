@@ -47,52 +47,30 @@
     mode: '0755'
     owner: "{{ real_user }}"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 - name: Download and install kube-score.
   get_url:
-    url: https://github.com/zegl/kube-score/releases/download/v{{ kube_score_version }}/kube-score_{{ kube_score_version }}_linux_amd64
+    url: https://github.com/zegl/kube-score/releases/download/v{{ kube_score_version }}/kube-score_{{ kube_score_version }}_darwin_amd64
     dest: /usr/local/bin/kube-score
     mode: '0755'
     owner: "{{ real_user }}"
-    group: "{{ real_user }}"
   vars:
     kube_score_version: "1.20.0"
 
 - name: Download kube-capacity.
   get_url:
-    url: https://github.com/robscott/kube-capacity/releases/download/v{{ kube_capacity_version }}/kube-capacity_v{{ kube_capacity_version }}_linux_x86_64.tar.gz
-    dest: "/tmp/kube-capacity_v{{ kube_capacity_version }}_linux_x86_64.tar.gz"
+    url: https://github.com/robscott/kube-capacity/releases/download/v{{ kube_capacity_version }}/kube-capacity_v{{ kube_capacity_version }}_darwin_x86_64.tar.gz
+    dest: "/tmp/kube-capacity_v{{ kube_capacity_version }}_darwin_x86_64.tar.gz"
     mode: '0644'
   vars:
     kube_capacity_version: "0.8.0"
 
 - name: Unzip kube-capacity.
   unarchive:
-    src: "/tmp/kube-capacity_v{{ kube_capacity_version }}_linux_x86_64.tar.gz"
+    src: "/tmp/kube-capacity_v{{ kube_capacity_version }}_darwin_x86_64.tar.gz"
     dest: "/tmp"
     remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
-    group: "{{ real_user }}"
   vars:
     kube_capacity_version: "0.8.0"
 
@@ -103,24 +81,22 @@
     dest: "/usr/local/bin/"
     mode: '0755'
     owner: "{{ real_user }}"
-    group: "{{ real_user }}"
 
 - name: Download stern.
   get_url:
-    url: https://github.com/stern/stern/releases/download/v{{ stern_version }}/stern_{{ stern_version }}_linux_amd64.tar.gz
-    dest: "/tmp/stern_{{ stern_version }}_linux_amd64.tar.gz"
+    url: https://github.com/stern/stern/releases/download/v{{ stern_version }}/stern_{{ stern_version }}_darwin_amd64.tar.gz
+    dest: "/tmp/stern_{{ stern_version }}_darwin_amd64.tar.gz"
     mode: '0644'
   vars:
     stern_version: "1.32.0"
 
 - name: Unzip stern.
   unarchive:
-    src: "/tmp/stern_{{ stern_version }}_linux_amd64.tar.gz"
+    src: "/tmp/stern_{{ stern_version }}_darwin_amd64.tar.gz"
     dest: "/tmp"
     remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
-    group: "{{ real_user }}"
   vars:
     stern_version: "1.32.0"
 
@@ -131,24 +107,22 @@
     dest: "/usr/local/bin/"
     mode: '0755'
     owner: "{{ real_user }}"
-    group: "{{ real_user }}"
 
 - name: Download kube-no-trouble.
   get_url:
-    url: https://github.com/doitintl/kube-no-trouble/releases/download/{{ kubent_version }}/kubent-{{ kubent_version }}-linux-amd64.tar.gz
-    dest: "/tmp/kubent-{{ kubent_version }}-linux-amd64.tar.gz"
+    url: https://github.com/doitintl/kube-no-trouble/releases/download/{{ kubent_version }}/kubent-{{ kubent_version }}-darwin-amd64.tar.gz
+    dest: "/tmp/kubent-{{ kubent_version }}-darwin-amd64.tar.gz"
     mode: '0644'
   vars:
     kubent_version: "0.7.3"
 
 - name: Unzip kube-no-trouble.
   unarchive:
-    src: "/tmp/kubent-{{ kubent_version }}-linux-amd64.tar.gz"
+    src: "/tmp/kubent-{{ kubent_version }}-darwin-amd64.tar.gz"
     dest: "/tmp"
     remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
-    group: "{{ real_user }}"
   vars:
     kubent_version: "0.7.3"
 
@@ -159,15 +133,13 @@
     dest: "/usr/local/bin/"
     mode: '0755'
     owner: "{{ real_user }}"
-    group: "{{ real_user }}"
 
 - name: Download and install K9s.
   get_url:
-    url: "https://github.com/derailed/k9s/releases/download/{{ k9s_version }}/k9s_Linux_amd64.tar.gz"
+    url: "https://github.com/derailed/k9s/releases/download/{{ k9s_version }}/k9s_Darwin_amd64.tar.gz"
     dest: "/tmp/k9s.tar.gz"
     mode: '0644'
     owner: "{{ real_user }}"
-    group: "{{ real_user }}"
   vars:
     k9s_version: "v0.50.9"
 
@@ -178,64 +150,83 @@
     remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
-    group: "{{ real_user }}"
 
-- name: Download Helm.
-  get_url:
-    url: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
-    dest: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
-    mode: '0644'
-  vars:
-    helm_version: "v3.17.4"
 
-- name: Unarchive Helm.
-  unarchive:
-    src: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
-    dest: "/tmp"
-    remote_src: yes
-    mode: '0755'
-    owner: "{{ real_user }}"
-    group: "{{ real_user }}"
-  vars:
-    helm_version: "v3.17.4"
 
-- name: Helm Install.
-  copy:
-    remote_src: yes
-    src: "/tmp/linux-amd64/helm"
-    dest: "/usr/local/bin/"
-    mode: '0755'
-    owner: "{{ real_user }}"
-    group: "{{ real_user }}"
 
-- name: Ensure /etc/apt/keyrings exists.
-  file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: '0755'
 
-- name: Remove old Lens repository file if exists.
-  file:
-    path: /etc/apt/sources.list.d/lens.list
-    state: absent
 
-- name: Download Lens GPG key and convert to binary format.
-  shell: |
-    curl -fsSL https://downloads.k8slens.dev/keys/gpg | gpg --dearmor -o /etc/apt/keyrings/lens.gpg
-  args:
-    creates: /etc/apt/keyrings/lens.gpg
 
-- name: Add Lens repository.
-  copy:
-    dest: /etc/apt/sources.list.d/lens.list
-    content: "deb [arch=amd64 signed-by=/etc/apt/keyrings/lens.gpg] https://downloads.k8slens.dev/apt/debian stable main"
-    mode: '0644'
 
-- name: Update apt cache.
-  apt:
-    update_cache: yes
 
-- name: Install Lens.
-  apt:
-    name: lens
-    state: present
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#- name: Download Helm.
+#  get_url:
+#    url: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
+#    dest: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
+#    mode: '0644'
+#  vars:
+#    helm_version: "v3.17.4"
+#
+#- name: Unarchive Helm.
+#  unarchive:
+#    src: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
+#    dest: "/tmp"
+#    remote_src: yes
+#    mode: '0755'
+#    owner: "{{ real_user }}"
+#    group: "{{ real_user }}"
+#  vars:
+#    helm_version: "v3.17.4"
+#
+#- name: Helm Install.
+#  copy:
+#    remote_src: yes
+#    src: "/tmp/linux-amd64/helm"
+#    dest: "/usr/local/bin/"
+#    mode: '0755'
+#    owner: "{{ real_user }}"
+#    group: "{{ real_user }}"
+#
+#- name: Ensure /etc/apt/keyrings exists.
+#  file:
+#    path: /etc/apt/keyrings
+#    state: directory
+#    mode: '0755'
+#
+#- name: Remove old Lens repository file if exists.
+#  file:
+#    path: /etc/apt/sources.list.d/lens.list
+#    state: absent
+#
+#- name: Download Lens GPG key and convert to binary format.
+#  shell: |
+#    curl -fsSL https://downloads.k8slens.dev/keys/gpg | gpg --dearmor -o /etc/apt/keyrings/lens.gpg
+#  args:
+#    creates: /etc/apt/keyrings/lens.gpg
+#
+#- name: Add Lens repository.
+#  copy:
+#    dest: /etc/apt/sources.list.d/lens.list
+#    content: "deb [arch=amd64 signed-by=/etc/apt/keyrings/lens.gpg] https://downloads.k8slens.dev/apt/debian stable main"
+#    mode: '0644'
+#
+#
+#- name: Install Lens.
+#  apt:
+#    name: lens
+#    state: present
+#
