@@ -5,28 +5,25 @@
     dest: /tmp/AWSCLIV2.pkg
     mode: '0644'
 
+- name: Check if the real AWS CLI binary already exists.
+  stat:
+    path: "/usr/local/aws-cli/v2/current/bin/aws"
+  register: aws_real_bin_stat
+
 - name: Install AWS CLI v2.
   command: installer -pkg /tmp/AWSCLIV2.pkg -target /
-  args:
-    creates: /usr/local/bin/aws
+  when: not aws_real_bin_stat.stat.exists
 
-- name: Check aws binary path.
-  command: which aws
-  register: aws_path
-  changed_when: false
-
-- name: Show aws path.
-  debug:
-    msg: "AWS CLI installed in: {{ aws_path.stdout }}"
+- name: Ensure symlink /usr/local/bin/aws -> real AWS CLI binary.
+  file:
+    src: "/usr/local/aws-cli/v2/current/bin/aws"
+    dest: "/usr/local/bin/aws"
+    state: link
+    force: yes
 
 - name: Check AWS CLI version.
   command: aws --version
-  register: aws_version
   changed_when: false
-
-- name: Show AWS CLI version.
-  debug:
-    msg: "Installed version: {{ aws_version.stdout }}"
 
 - name: Download AWS VPN Client.
   get_url:
