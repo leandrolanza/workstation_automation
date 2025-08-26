@@ -2,6 +2,7 @@
 
 ansible-playbook playbooks.yml --ask-become-pass
 
+
 ubuntu 22.04
 
 ubuntu 24.04
