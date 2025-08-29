@@ -67,8 +67,8 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - slack
     - postman
+    - mysql-workbench-community
 
 - name: Ensure /etc/apt/keyrings exists.
   file:
@@ -96,5 +96,17 @@
 - name: Install Google Chrome.
   apt:
     name: google-chrome-stable
+    state: present
+    update_cache: yes
+
+- name: Download Slack .deb.
+  get_url:
+    url: "https://downloads.slack-edge.com/releases/linux/4.39.90/prod/x64/slack-desktop-4.39.90-amd64.deb"
+    dest: "/tmp/slack-desktop-4.39.90-amd64.deb"
+    mode: '0644'
+
+- name: Install Slack.
+  apt:
+    deb: "/tmp/slack-desktop-4.39.90-amd64.deb"
     state: present
     update_cache: yes
