@@ -55,7 +55,7 @@
   replace:
     path: "/Users/{{ real_user }}/.zshrc"
     regexp: '^plugins=\(.*\)'
-    replace: 'plugins=(git kubectl aws zsh-autosuggestions)'
+    replace: 'plugins=({{ zsh_plugins }})'
 
 - name: Clone zsh-autosuggestions plugin
   git:

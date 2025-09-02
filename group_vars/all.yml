@@ -1,0 +1,11 @@
+kubectl_version: "1.33.3/2025-08-03"
+kube_score_version: "1.20.0"
+kube_capacity_version: "v0.8.0"
+stern_version: "1.32.0"
+kubent_version: "0.7.3"
+k9s_version: "v0.50.9"
+helm_version: "v3.17.4"
+terraform_version: "1.13.0"
+packer_version: "1.14.1"
+vault_version: "1.20.2"
+zsh_plugins: git kubectl aws zsh-autosuggestions

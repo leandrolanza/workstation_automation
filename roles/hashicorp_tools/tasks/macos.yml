@@ -8,8 +8,6 @@
     url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_darwin_arm64.zip"
     dest: "/tmp/terraform_{{ terraform_version }}_darwin_arm64.zip"
     mode: '0644'
-  vars:
-    terraform_version: "1.13.0"
 
 - name: Unzip Terraform.
   unarchive:
@@ -18,8 +16,6 @@
     remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
-  vars:
-    terraform_version: "1.13.0"
 
 - name: Terraform Install.
   copy:
@@ -34,8 +30,6 @@
     url: https://releases.hashicorp.com/packer/{{ packer_version }}/packer_{{ packer_version }}_darwin_arm64.zip
     dest: "/tmp/packer_{{ packer_version }}_darwin_arm64.zip"
     mode: '0644'
-  vars:
-    packer_version: "1.14.1"
 
 - name: Unzip Packer.
   unarchive:
@@ -44,8 +38,6 @@
     remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
-  vars:
-    packer_version: "1.14.1"
 
 - name: Packer Install.
   copy:
@@ -60,8 +52,6 @@
     url: https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_darwin_arm64.zip
     dest: "/tmp/vault_{{ vault_version }}_darwin_arm64.zip"
     mode: '0644'
-  vars:
-    vault_version: "1.20.2"
 
 - name: Unzip Vault.
   unarchive:
@@ -70,8 +60,6 @@
     remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
-  vars:
-    vault_version: "1.20.2"
 
 - name: Vault Install.
   copy:

@@ -60,7 +60,7 @@
   lineinfile:
     path: "/home/{{ real_user }}/.zshrc"
     regexp: '^plugins='
-    line: 'plugins=(git zsh-autosuggestions)'
+    line: 'plugins=({{ zsh_plugins }})'
 
 - name: Install packages via snap.
   snap:

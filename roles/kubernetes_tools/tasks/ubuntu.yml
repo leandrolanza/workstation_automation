@@ -10,8 +10,6 @@
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
-  vars:
-    kubectl_version: "1.33.0/2025-05-01"
 
 - name: Verify if kubectl is installed correctly.
   command: kubectl version --client
@@ -45,16 +43,12 @@
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
-  vars:
-    kube_score_version: "1.20.0"
 
 - name: Download kube-capacity.
   get_url:
     url: https://github.com/robscott/kube-capacity/releases/download/v{{ kube_capacity_version }}/kube-capacity_v{{ kube_capacity_version }}_linux_x86_64.tar.gz
     dest: "/tmp/kube-capacity_v{{ kube_capacity_version }}_linux_x86_64.tar.gz"
     mode: '0644'
-  vars:
-    kube_capacity_version: "0.8.0"
 
 - name: Unzip kube-capacity.
   unarchive:
@@ -64,8 +58,6 @@
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
-  vars:
-    kube_capacity_version: "0.8.0"
 
 - name: kube-capacity Install.
   copy:
@@ -81,8 +73,6 @@
     url: https://github.com/stern/stern/releases/download/v{{ stern_version }}/stern_{{ stern_version }}_linux_amd64.tar.gz
     dest: "/tmp/stern_{{ stern_version }}_linux_amd64.tar.gz"
     mode: '0644'
-  vars:
-    stern_version: "1.32.0"
 
 - name: Unzip stern.
   unarchive:
@@ -92,8 +82,6 @@
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
-  vars:
-    stern_version: "1.32.0"
 
 - name: stern Install.
   copy:
@@ -109,8 +97,6 @@
     url: https://github.com/doitintl/kube-no-trouble/releases/download/{{ kubent_version }}/kubent-{{ kubent_version }}-linux-amd64.tar.gz
     dest: "/tmp/kubent-{{ kubent_version }}-linux-amd64.tar.gz"
     mode: '0644'
-  vars:
-    kubent_version: "0.7.3"
 
 - name: Unzip kube-no-trouble.
   unarchive:
@@ -120,8 +106,6 @@
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
-  vars:
-    kubent_version: "0.7.3"
 
 - name: kube-no-trouble Install.
   copy:
@@ -139,8 +123,6 @@
     mode: '0644'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
-  vars:
-    k9s_version: "v0.50.9"
 
 - name: Unarchive and install K9s.
   unarchive:
@@ -156,8 +138,6 @@
     url: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
     dest: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
     mode: '0644'
-  vars:
-    helm_version: "v3.17.4"
 
 - name: Unarchive Helm.
   unarchive:
@@ -167,8 +147,6 @@
     mode: '0755'
     owner: "{{ real_user }}"
     group: "{{ real_user }}"
-  vars:
-    helm_version: "v3.17.4"
 
 - name: Helm Install.
   copy:

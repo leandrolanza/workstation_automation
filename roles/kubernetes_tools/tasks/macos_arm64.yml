@@ -21,8 +21,6 @@
     dest: "/usr/local/bin/kubectl"
     mode: '0755'
     owner: "{{ real_user }}"
-  vars:
-    kubectl_version: "1.33.3/2025-08-03"
 
 - name: Verify if kubectl is installed correctly.
   command: kubectl version --client
@@ -53,48 +51,36 @@
     dest: /usr/local/bin/kube-score
     mode: '0755'
     owner: "{{ real_user }}"
-  vars:
-    kube_score_version: "1.20.0"
 
 - name: Download kube-capacity.
   get_url:
     url: https://github.com/robscott/kube-capacity/releases/download/{{ kube_capacity_version }}/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar.gz
     dest: "/tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar"
     mode: '0644'
-  vars:
-    kube_capacity_version: "v0.8.0"
 
 - name: Extract kube-capacity.
   command: >
     tar -xzf /tmp/kube-capacity_{{ kube_capacity_version }}_darwin_x86_64.tar -C /usr/local/bin
   args:
     creates: "/usr/local/bin/kube-capacity"
-  vars:
-    kube_capacity_version: "v0.8.0"
 
 - name: Download stern.
   get_url:
     url: https://github.com/stern/stern/releases/download/v{{ stern_version }}/stern_{{ stern_version }}_darwin_arm64.tar.gz
     dest: "/tmp/stern_{{ stern_version }}_darwin_arm64.tar.gz"
     mode: '0644'
-  vars:
-    stern_version: "1.32.0"
 
 - name: Extract stern. (macOS arm64)
   command: >
     tar -xzf /tmp/stern_{{ stern_version }}_darwin_arm64.tar.gz -C /usr/local/bin
   args:
     creates: "/usr/local/bin/stern"
-  vars:
-    stern_version: "1.32.0"
 
 - name: Download kube-no-trouble (kubent).
   get_url:
     url: https://github.com/doitintl/kube-no-trouble/releases/download/{{ kubent_version }}/kubent-{{ kubent_version }}-darwin-arm64.tar.gz
     dest: "/tmp/kubent-{{ kubent_version }}-darwin-arm64.tar.gz"
     mode: '0644'
-  vars:
-    kubent_version: "0.7.3"
 
 - name: Unzip kube-no-trouble (kubent).
   unarchive:
@@ -103,8 +89,6 @@
     remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
-  vars:
-    kubent_version: "0.7.3"
 
 - name: kube-no-trouble (kubent) Install.
   copy:
@@ -120,8 +104,6 @@
     dest: "/tmp/k9s.tar.gz"
     mode: '0644'
     owner: "{{ real_user }}"
-  vars:
-    k9s_version: "v0.50.9"
 
 - name: Unarchive and install K9s.
   unarchive:
@@ -136,8 +118,6 @@
     url: "https://get.helm.sh/helm-{{ helm_version }}-darwin-arm64.tar.gz"
     dest: "/tmp/helm-{{ helm_version }}-darwin-arm64.tar.gz"
     mode: '0644'
-  vars:
-    helm_version: "v3.17.4"
 
 - name: Unarchive Helm.
   unarchive:
@@ -146,8 +126,6 @@
     remote_src: yes
     mode: '0755'
     owner: "{{ real_user }}"
-  vars:
-    helm_version: "v3.17.4"
 
 - name: Helm Install.
   copy:
