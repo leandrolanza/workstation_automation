@@ -27,3 +27,38 @@
     name: slack
     state: present
   become: false
+
+- name: Set real user (not root).
+  set_fact:
+    real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
+
+- name: Install Oh My Zsh if not exists.
+  git:
+    repo: "https://github.com/ohmyzsh/ohmyzsh.git"
+    dest: "/Users/{{ real_user }}/.oh-my-zsh"
+    update: no
+
+- name: Copy default Oh My Zsh configuration.
+  copy:
+    src: "/Users/{{ real_user }}/.oh-my-zsh/templates/zshrc.zsh-template"
+    dest: "/Users/{{ real_user }}/.zshrc"
+    remote_src: yes
+    force: no
+
+- name: Configure theme in .zshrc
+  lineinfile:
+    path: "/Users/{{ real_user }}/.zshrc"
+    regexp: '^ZSH_THEME='
+    line: 'ZSH_THEME="robbyrussell"'
+
+- name: Activate useful plugins in .zshrc
+  replace:
+    path: "/Users/{{ real_user }}/.zshrc"
+    regexp: '^plugins=\(.*\)'
+    replace: 'plugins=(git kubectl aws zsh-autosuggestions)'
+
+- name: Clone zsh-autosuggestions plugin
+  git:
+    repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+    dest: "/Users/{{ real_user }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+    update: yes
