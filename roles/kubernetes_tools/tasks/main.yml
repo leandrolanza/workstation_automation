@@ -3,6 +3,10 @@
   include_tasks: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
-- name: Include tasks for macOS.
-  include_tasks: macos.yml
-  when: ansible_distribution == 'MacOSX'
+- name: Include tasks for macOS x86_64.
+  include_tasks: macos_x86_64.yml
+  when: ansible_distribution == 'MacOSX' and ansible_architecture == "x86_64"
+
+- name: Include tasks for macOS arm64.
+  include_tasks: macos_arm64.yml
+  when: ansible_distribution == 'MacOSX' and ansible_architecture == "arm64"

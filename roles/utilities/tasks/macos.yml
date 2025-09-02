@@ -1,11 +1,4 @@
 ---
-- name: Search for macOS updates.
-  ansible.builtin.command: softwareupdate -l
-  register: updates_list
-
-#- name: Apply all available updates.
-#  ansible.builtin.command: softwareupdate -i -a
-
 - name: Install Homebrew on macOS (if not exists).
   ansible.builtin.shell: |
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -27,3 +20,10 @@
     - unzip
     - make
     - jq
+    - gnu-tar
+
+- name: Install Slack
+  community.general.homebrew_cask:
+    name: slack
+    state: present
+  become: false

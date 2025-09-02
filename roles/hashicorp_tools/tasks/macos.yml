@@ -1,8 +1,30 @@
-- name: Docker - Install Docker via Homebrew.
-  homebrew:
-    name: docker
-    state: present
+---
+- name: Set real user (not root).
+  set_fact:
+    real_user: "{{ ansible_env.SUDO_USER | default(ansible_user_id) }}"
 
-- name: Docker - Warning about Docker Desktop.
-  debug:
-    msg: "Docker Desktop installation must be done manually on macOS Catalina."
+- name: Download Terraform.
+  get_url:
+    url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_darwin_arm64.zip"
+    dest: "/tmp/terraform_{{ terraform_version }}_darwin_arm64.zip"
+    mode: '0644'
+  vars:
+    terraform_version: "1.13.0"
+
+- name: Unzip Terraform.
+  unarchive:
+    src: "/tmp/terraform_{{ terraform_version }}_darwin_arm64.zip"
+    dest: "/tmp"
+    remote_src: yes
+    mode: '0755'
+    owner: "{{ real_user }}"
+  vars:
+    terraform_version: "1.13.0"
+
+- name: Terraform Install.
+  copy:
+    remote_src: yes
+    src: "/tmp/terraform"
+    dest: "/usr/local/bin/"
+    mode: '0755'
+    owner: "{{ real_user }}"
