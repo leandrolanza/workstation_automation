@@ -130,26 +130,13 @@
 - name: Helm Install.
   copy:
     remote_src: yes
-    src: "/tmp/linux-amd64/helm"
+    src: "/tmp/darwin-amd64/helm"
     dest: "/usr/local/bin/"
     mode: '0755'
     owner: "{{ real_user }}"
 
-- name: Download Lens .dmg.
-  get_url:
-    url: "https://api.k8slens.dev/binaries/Lens-2025.8.121212-latest.dmg"
-    dest: "/tmp/Lens.dmg"
-    mode: '0644'
-
-- name: Mount the dmg.
-  command: hdiutil attach /tmp/Lens.dmg -nobrowse -quiet
-  register: hdiutil_output
-
-- name: Copy Lens.app to /Applications.
-  command: cp -r "/Volumes/Lens/Lens.app" /Applications/
-  args:
-    creates: /Applications/Lens.app
-
-- name: Unmount the dmg.
-  command: hdiutil detach "/Volumes/Lens"
-  ignore_errors: yes
+- name: Install Lens via Homebrew
+  community.general.homebrew_cask:
+    name: lens
+    state: present
+  become: false
