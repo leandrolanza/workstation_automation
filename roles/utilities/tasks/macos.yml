@@ -62,3 +62,7 @@
     repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
     dest: "/Users/{{ real_user }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
     update: yes
+
+- name: Install Rosetta 2 (Apple Silicon)
+  ansible.builtin.command: softwareupdate --install-rosetta --agree-to-license
+  become: true
